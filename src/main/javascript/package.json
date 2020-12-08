@@ -10,7 +10,8 @@
   "scripts": {
     "prebuild": "npm run clean",
     "dr:surge": "node dr-surge.js",
-    "build": "webpack --config webpack.prod.js && npm run dr:surge && rm -rf ../resources/META-INF/resources/* && mv dist/* ../resources/META-INF/resources && cp .env ../resources/META-INF-resources",
+    "bdev": "webpack --config webpack.dev.js && npm run dr:surge && rm -rf ../resources/META-INF/resources/* && mv dist/* ../resources/META-INF/resources && cp .env ../resources/META-INF/resources",
+    "bprod": "webpack --config webpack.prod.js && npm run dr:surge && rm -rf ../resources/META-INF/resources/* && mv dist/* ../resources/META-INF/resources && cp .env ../resources/META-INF/resources",
     "start": "node server.js",
     "start:dev": "webpack serve --hot --color --progress --config webpack.dev.js",
     "test": "jest",
