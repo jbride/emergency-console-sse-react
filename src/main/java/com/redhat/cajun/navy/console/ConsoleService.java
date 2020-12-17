@@ -10,7 +10,7 @@ import com.redhat.cajun.navy.console.client.TopicIncidentEventConsumer;
 import com.redhat.cajun.navy.console.client.TopicMissionCommandConsumer;
 import com.redhat.cajun.navy.console.client.TopicResponderCommandConsumer;
 import com.redhat.cajun.navy.console.client.TopicResponderLocationConsumer;
-import com.redhat.cajun.navy.console.client.TopicResponderUpdateConsumer;
+import com.redhat.cajun.navy.console.client.TopicResponderEventConsumer;
 
 import org.jboss.logging.Logger;
 import io.quarkus.runtime.StartupEvent;
@@ -36,7 +36,7 @@ public class ConsoleService {
     TopicResponderLocationConsumer rlConsumer;
 
     @Inject
-    TopicResponderUpdateConsumer ruConsumer;
+    TopicResponderEventConsumer ruConsumer;
 
     void onStart(@Observes @Priority(value = 1) StartupEvent ev) {
         log.info("onStart() ieConsumer = "+ieConsumer);

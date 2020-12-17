@@ -39,9 +39,7 @@ function onKeycloakEvent(event, error) {
 }
 
 ReactDOM.render(
-/*
 <App />,
-*/
 /*
   <React.StrictMode>
     <ReactKeycloakProvider
@@ -53,6 +51,8 @@ ReactDOM.render(
     </ReactKeycloakProvider>
   </React.StrictMode>,
 */
+/*
   <KafkaTest />,
+*/
   document.getElementById('root') as HTMLElement 
 );

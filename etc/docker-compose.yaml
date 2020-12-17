@@ -1,4 +1,4 @@
-# podman-compose -f etc/docker-compose.yaml up -d 
+# podman-compose -f etc/docker-compose.yaml up -p erdemo-infra -d 
 
 
 version: '2'

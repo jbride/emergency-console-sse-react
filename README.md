@@ -103,3 +103,8 @@
    $ kafka-console-producer.sh --broker-list localhost:9092 --property parse.key=true --property key.separator=":" --topic topic-responder-command
    `````
 
+mvn -s /settings.xml quarkus:dev > /tmp/quarkus.log 2>&1 &
+
+mvn -s /settings.xml clean install && java -jar target/emergency-console-sse-react-1.0.0-runner.jar > /tmp/quarkus.log 2>&1 &
+
+curl localhost:8080/health/ready

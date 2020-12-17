@@ -7,6 +7,7 @@ import { Dashboard } from '@app/Dashboard/Dashboard';
 import { Incidents } from '@app/Incidents/Incidents';
 import { DisasterLocation } from '@app/DisasterLocation/DisasterLocation';
 import { GeneralSettings } from '@app/Settings/General/GeneralSettings';
+import { ExternalRoute } from '@app/Settings/External/ExternalRoute';
 import { ProfileSettings } from '@app/Settings/Profile/ProfileSettings';
 import { NotFound } from '@app/NotFound/NotFound';
 import { useDocumentTitle } from '@app/utils/useDocumentTitle';
@@ -97,11 +98,11 @@ const routes: AppRouteConfig[] = [
     label: 'Community',
     routes: [
       {
-        component: GeneralSettings,
+        component: ExternalRoute,
         exact: true,
         label: 'Github',
         path: 'https://github.com/Emergency-Response-Demo',
-        title: 'Emergency Response Demo | Source Code',
+        title: 'Emergency Response Demo | Source Code'
       },
       {
         component: ProfileSettings,
