@@ -1,14 +1,14 @@
 import Keycloak from 'keycloak-js';
 
-console.log('configuring keycloak for auth server. SSO_URL = '+process.env.SSO_URL);
+console.log('configuring keycloak for auth server. AUTH_URL = '+process.env.AUTH_URL);
 export const keycloak = new Keycloak({
     "principal-attribute": "preferred_username",
-    "realm": process.env.SSO_REALM,
-    "url":  process.env.SSO_URL,
+    "realm": process.env.REALM,
+    "url":  process.env.AUTH_URL,
     "ssl-required": "external",
-    "resource": process.env.SSO_CLIENT,
+    "resource": process.env.CLIENTID,
     "public-client": true,
-    "clientId": process.env.SSO_CLIENT,
+    "clientId": process.env.CLIENTID,
     "enable-cors": true,
     "pkceMethod": "S256"
 });

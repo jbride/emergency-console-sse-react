@@ -41,8 +41,10 @@
 
 1. At root of webapp soruce code (src/main/javascript), create an `.env` file and populate with the following:
    `````
-   SSO_URL=http://localhost:8090/auth
-   SSO_REALM=user1-emergency-realm
+   AUTH_URL=http://localhost:8090/auth
+   CLIENTID=js
+   KEYCLOAK=true
+   REALM=user1-emergency-realm
    SSO_CLIENT=account-console
 
    INCIDENT_HOST: "http://localhost:8080"
