@@ -9,6 +9,7 @@ class ServicesTest extends Component {
     RESPONDER_SIMULATOR_HOST: String
     DISASTER_SIMULATOR_HOST: String
     DISASTER_HOST: String
+    DISASTER_ROUTE: String
 
     constructor(props) {
         super(props);
@@ -20,6 +21,7 @@ class ServicesTest extends Component {
         this.PROCESS_VIEWER_HOST = String(process.env.PROCESS_VIEWER_HOST);
         this.RESPONDER_SIMULATOR_HOST = String(process.env.RESPONDER_SIMULATOR_HOST);
         this.DISASTER_SIMULATOR_HOST = String(process.env.DISASTER_SIMULATOR_HOST);
+        this.DISASTER_SIMULATOR_ROUTE = String(process.env.DISASTER_SIMULATOR_ROUTE);
         this.DISASTER_HOST = String(process.env.DISASTER_HOST);
     }
 
@@ -39,6 +41,7 @@ class ServicesTest extends Component {
                 <div>PROCESS_VIEWER_HOST = { this.PROCESS_VIEWER_HOST }</div>
                 <div>RESPONDER_SIMULATOR_HOST = { this.RESPONDER_SIMULATOR_HOST }</div>
                 <div>DISASTER_SIMULATOR_HOST = { this.DISASTER_SIMULATOR_HOST }</div>
+                <div>DISASTER_SIMULATOR_ROUTE = { this.DISASTER_SIMULATOR_ROUTE }</div>
                 <div>DISASTER_HOST = { this.DISASTER_HOST }</div>
             </div>
         );

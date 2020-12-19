@@ -1,0 +1,182 @@
+# Purpose:
+#     For quick dev / test, this config provides an Emergency Response Console Deployment using a Fedoratools linux container image
+#       https://github.com/jbride/pocs/blob/master/ocp/ftools/README.adoc
+#
+# Procedure:
+#   oc tag --source=docker quay.io/rhtgptetraining/fedoratools:2.17 fedoratools:2.17 -n user1-er-demo
+#   oc create -f etc/emergency-console-sse-react.yml -n user1-er-demo
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: emergency-console
+    app.kubernetes.io/part-of: webtier
+  name: emergency-console
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    app: emergency-console
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 3600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: emergency-console
+    spec:
+      containers:
+      - env:
+
+        # Fedora Tools specific
+        - name: M2_MIRROR_URL
+          value: http://nexus.er-tools:8081/content/groups/public
+
+        # TO-DO: modify emergency-console-config CM to include: kafka.bootstrap.servers: kafka-cluster-kafka-bootstrap.user1-er-demo.svc:9092
+        - name: JAVA_OPTIONS
+          value: >
+            -Dvertx.metrics.options.enabled=true -Dvertx.metrics.options.registryName=prometheus -Dquarkus.kubernetes-config.enabled=true -Dquarkus.kubernetes-config.config-maps=emergency-console-config
+
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: AUTH_URL
+          valueFrom:
+            configMapKeyRef:
+              key: AUTH_URL
+              name: sso-config
+        - name: KEYCLOAK
+          valueFrom:
+            configMapKeyRef:
+              key: KEYCLOAK
+              name: sso-config
+        - name: PUBLIC_KEY
+          valueFrom:
+            configMapKeyRef:
+              key: PUBLIC_KEY
+              name: sso-config
+        - name: REALM
+          valueFrom:
+            configMapKeyRef:
+              key: REALM
+              name: sso-config
+        - name: CLIENTID
+          valueFrom:
+            configMapKeyRef:
+              key: CLIENTID
+              name: sso-config
+        - name: TOKEN
+          valueFrom:
+            configMapKeyRef:
+              key: TOKEN
+              name: emergency-console-config
+        - name: POLLING
+          valueFrom:
+            configMapKeyRef:
+              key: POLLING
+              name: emergency-console-config
+        - name: INCIDENT_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: INCIDENT
+              name: emergency-console-config
+        - name: MISSION_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: MISSION
+              name: emergency-console-config
+        - name: PROCESS_VIEWER_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: PROCESS_VIEWER
+              name: emergency-console-config
+        - name: RESPONDER_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: RESPONDER
+              name: emergency-console-config
+        - name: RESPONDER_SIMULATOR_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: RESPONDER_SIMULATOR
+              name: emergency-console-config
+        - name: DISASTER_SIMULATOR_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: DISASTER_SIMULATOR
+              name: emergency-console-config
+        - name: DISASTER_SIMULATOR_ROUTE
+          valueFrom:
+            configMapKeyRef:
+              key: DISASTER_SIMULATOR_ROUTE
+              name: emergency-console-config
+        - name: PRIORITY
+          valueFrom:
+            configMapKeyRef:
+              key: PRIORITY
+              name: emergency-console-config
+        - name: DISASTER
+          valueFrom:
+            configMapKeyRef:
+              key: DISASTER
+              name: emergency-console-config
+        imagePullPolicy: IfNotPresent
+        name: emergency-console
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+
+        # ftools specific
+        volumeMounts:
+        - name: ftools-data
+          mountPath: "/build"
+
+        resources:
+          limits:
+            cpu: 3000m
+            memory: 1024Mi
+          requests:
+            cpu: 200m
+            memory: 100Mi
+        securityContext:
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: emergency-console
+      serviceAccountName: emergency-console
+      terminationGracePeriodSeconds: 30
+
+      # ftools specific
+      volumes:
+      - name: "ftools-data"
+        persistentVolumeClaim:
+          claimName: "ftools-data"
+
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - emergency-console
+      from:
+        kind: ImageStreamTag
+        name: fedoratools:2.17
+        namespace: user1-er-demo
+    type: ImageChange
