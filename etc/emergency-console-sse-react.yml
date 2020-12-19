@@ -126,7 +126,7 @@ spec:
             configMapKeyRef:
               key: PRIORITY
               name: emergency-console-config
-        - name: DISASTER
+        - name: DISASTER_HOST
           valueFrom:
             configMapKeyRef:
               key: DISASTER

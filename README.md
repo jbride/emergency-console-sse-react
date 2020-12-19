@@ -53,7 +53,7 @@
    export PROCESS_VIEWER_HOST="http://localhost:8080"
    export RESPONDER_SIMULATOR_HOST="http://localhost:8080"
    export DISASTER_SIMULATOR_HOST="http://localhost:8080"
-   export PRIORITY_HOST="http://localhost:8080"
+   export DISASTER_SIMULATOR_ROUTE="http://localhost:8080"
    export DISASTER_HOST="http://localhost:8080"
    `````
 
@@ -110,3 +110,6 @@ mvn -s /settings.xml quarkus:dev > /tmp/quarkus.log 2>&1 &
 mvn -s /settings.xml clean install && java -jar target/emergency-console-sse-react-1.0.0-runner.jar > /tmp/quarkus.log 2>&1 &
 
 curl localhost:8080/health/ready
+
+curl https://user1-emergency-console.apps.ratwater.xyz/responder/stats
+

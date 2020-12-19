@@ -10,18 +10,18 @@ class KafkaTest extends Component {
   incidentCommandSource: EventSource
   missionSource: EventSource;
   responderLocationUpdateSource: EventSource;
-  responderUpdateSource: EventSource;
+  responderEventSource: EventSource;
   responderCommandSource: EventSource;
 
   constructor(props) {
     super(props);
     console.log(" ..... starting KafkaTest");
-    this.incidentUpdateSource = new EventSource("/incidentUpdate/stream");
-    this.incidentCommandSource = new EventSource("/incidentCommand/stream");
+    this.incidentUpdateSource = new EventSource("/incident/event/stream");
+    this.incidentCommandSource = new EventSource("/incident/command/stream");
     this.missionSource = new EventSource("/mission/stream");
     this.responderLocationUpdateSource = new EventSource("/responderLocationUpdate/stream");
-    this.responderUpdateSource = new EventSource("/responderUpdate/stream");
-    this.responderCommandSource = new EventSource("/responderCommand/stream");
+    this.responderEventSource = new EventSource("/responder/event/stream");
+    this.responderCommandSource = new EventSource("/responder/command/stream");
     this.state = {
       incidentUpdate: 'changeme: incidentUpdate',
       incidentCommand: 'changeme: incidentCommand',
@@ -69,13 +69,13 @@ class KafkaTest extends Component {
       this.responderLocationUpdateSource.close();
       }
     );
-    this.responderUpdateSource.onmessage = e => {
+    this.responderEventSource.onmessage = e => {
       this.setState({ responderUpdate: e.data});
       console.log("responderUpdate = "+this.state.responderUpdate);
     }
-    this.responderUpdateSource.addEventListener("closedConnection", e => {
+    this.responderEventSource.addEventListener("closedConnection", e => {
       console.log("stopping responderUpdateSource SSE");
-      this.responderUpdateSource.close();
+      this.responderEventSource.close();
       }
     );
     this.responderCommandSource.onmessage = e => {
@@ -94,7 +94,7 @@ class KafkaTest extends Component {
     this.incidentCommandSource.close();
     this.missionSource.close();
     this.responderLocationUpdateSource.close;
-    this.responderUpdateSource.close;
+    this.responderEventSource.close;
     this.responderCommandSource.close;
   }
 

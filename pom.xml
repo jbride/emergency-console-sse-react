@@ -30,20 +30,39 @@
     </dependencies>
   </dependencyManagement>
   <dependencies>
+
+
+    <!-- Quarkus REST client:  https://quarkus.io/guides/rest-client -->
+    <dependency>  
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-jackson</artifactId>
+    </dependency>
+
+    <!-- HTTP Reactive Routes:  https://quarkus.io/guides/reactive-routes -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-mutiny</artifactId>
+    </dependency>
+
+    <!-- Base JAX-RS and OpenAPI -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5</artifactId>
-      <scope>test</scope>
+      <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <scope>test</scope>
-    </dependency>
+
+    <!-- Reactive message consumption -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
@@ -55,6 +74,17 @@
     <dependency>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-kubernetes-config</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>

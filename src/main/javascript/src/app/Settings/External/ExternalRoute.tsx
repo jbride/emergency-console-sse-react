@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 class ExternalRoute extends Component {
+  
   constructor(props) {
-    //super(props);
+    super(props);
     console.log("ExternalRoute() path = "+this.state.path);
     window.location = this.state.path;
   }

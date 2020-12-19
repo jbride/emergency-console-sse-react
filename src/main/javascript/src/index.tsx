@@ -40,23 +40,21 @@ function onKeycloakEvent(event, error) {
 }
 
 ReactDOM.render(
-/*
-<App />,
-*/
-/*
-  <React.StrictMode>
-    <ReactKeycloakProvider
-      authClient={keycloak}
-      onEvent={onKeycloakEvent}
-      onTokens={onKeycloakTokens}
-    >
+  
+  <div>
+    <React.StrictMode>
+      <ReactKeycloakProvider
+        authClient={keycloak}
+        onEvent={onKeycloakEvent}
+        onTokens={onKeycloakTokens} >
+  
       <KeycloakTest />
-    </ReactKeycloakProvider>
-  </React.StrictMode>,
-*/
-/*
-  <KafkaTest />,
-*/
-  <ServicesTest />,
+      </ReactKeycloakProvider>
+    </React.StrictMode>,
+    //<App />,
+    //<KafkaTest />,
+    <ServicesTest />
+  </div>,
+  
   document.getElementById('root') as HTMLElement 
 );
