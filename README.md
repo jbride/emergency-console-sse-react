@@ -39,22 +39,22 @@
 
 ## webapp build and deploy
 
-1. At root of webapp soruce code (src/main/javascript), create an `.env` file and populate with the following:
+1. For a local environment, set the following environment variables:
    `````
-   AUTH_URL=http://localhost:8090/auth
-   CLIENTID=js
-   KEYCLOAK=true
-   REALM=user1-emergency-realm
-   SSO_CLIENT=account-console
+   export AUTH_URL=http://localhost:8090/auth
+   export CLIENTID=js
+   export KEYCLOAK=true
+   export REALM=user1-emergency-realm
+   export SSO_CLIENT=account-console
 
-   INCIDENT_HOST: "http://localhost:8080"
-   RESPONDER_HOST: "http://localhost:8080"
-   MISSION_HOST: "http://localhost:8080"
-   PROCESS_VIEWER_HOST: "http://localhost:8080"
-   RESPONDER_SIMULATOR_HOST: "http://localhost:8080"
-   DISASTER_SIMULATOR_HOST: "http://localhost:8080"
-   PRIORITY_HOST: "http://localhost:8080"
-   DISASTER_HOST: "http://localhost:8080"
+   export INCIDENT_HOST="http://localhost:8080"
+   export RESPONDER_HOST="http://localhost:8080"
+   export MISSION_HOST="http://localhost:8080"
+   export PROCESS_VIEWER_HOST="http://localhost:8080"
+   export RESPONDER_SIMULATOR_HOST="http://localhost:8080"
+   export DISASTER_SIMULATOR_HOST="http://localhost:8080"
+   export PRIORITY_HOST="http://localhost:8080"
+   export DISASTER_HOST="http://localhost:8080"
    `````
 
 1. At root of webapp source code (src/main/javascript), install all javascript dependencies:

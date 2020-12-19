@@ -5,6 +5,7 @@ import { ReactKeycloakProvider } from '@react-keycloak/web'
 import { keycloak } from './keycloak';
 import { KeycloakTest } from '@app/test/KeycloakTest';
 import { KafkaTest } from '@app/test/KafkaTest';
+import { ServicesTest } from '@app/test/ServicesTest';
 
 const REACT_VERSION = React.version;
 
@@ -39,7 +40,9 @@ function onKeycloakEvent(event, error) {
 }
 
 ReactDOM.render(
+/*
 <App />,
+*/
 /*
   <React.StrictMode>
     <ReactKeycloakProvider
@@ -54,5 +57,6 @@ ReactDOM.render(
 /*
   <KafkaTest />,
 */
+  <ServicesTest />,
   document.getElementById('root') as HTMLElement 
 );
