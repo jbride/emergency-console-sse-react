@@ -46,15 +46,6 @@
    export KEYCLOAK=true
    export REALM=user1-emergency-realm
    export SSO_CLIENT=account-console
-
-   export INCIDENT_HOST="http://localhost:8080"
-   export RESPONDER_HOST="http://localhost:8080"
-   export MISSION_HOST="http://localhost:8080"
-   export PROCESS_VIEWER_HOST="http://localhost:8080"
-   export RESPONDER_SIMULATOR_HOST="http://localhost:8080"
-   export DISASTER_SIMULATOR_HOST="http://localhost:8080"
-   export DISASTER_SIMULATOR_ROUTE="http://localhost:8080"
-   export DISASTER_HOST="http://localhost:8080"
    `````
 
 1. At root of webapp source code (src/main/javascript), install all javascript dependencies:

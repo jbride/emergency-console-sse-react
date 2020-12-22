@@ -10,7 +10,7 @@ import {
   PageSidebar,
   SkipToContent
 } from '@patternfly/react-core';
-import { routes, IAppRoute, IAppRouteGroup } from '@app/routes';
+import { routes, IAppRoute, IAppRouteGroup } from '@app/components/routes';
 import logo from '@app/bgimages/Patternfly-Logo.svg';
 
 interface IAppLayout {

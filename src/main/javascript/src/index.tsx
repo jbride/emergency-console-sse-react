@@ -2,14 +2,19 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { App } from '@app/index';
 import { ReactKeycloakProvider } from '@react-keycloak/web'
-import { keycloak } from './keycloak';
-import { KeycloakTest } from '@app/test/KeycloakTest';
 import { KafkaTest } from '@app/test/KafkaTest';
 import { ServicesTest } from '@app/test/ServicesTest';
+import { Incidents } from '@app/components/Incidents/Incidents'
+
+import { keycloak } from './keycloak';
+import { KeycloakTest } from '@app/test/KeycloakTest';
 
 const REACT_VERSION = React.version;
 
 console.log("..... starting REACT version = "+REACT_VERSION+" ; NODE_ENV = "+process.env.NODE_ENV);
+
+// These come directly from shell;  no need for .env
+console.log("AUTH_URL= "+process.env.AUTH_URL);
 
 if (process.env.NODE_ENV !== "production") {
   const config = {
@@ -22,11 +27,11 @@ if (process.env.NODE_ENV !== "production") {
   };
 }
 
+/*
 const tokens = JSON.parse(localStorage.getItem('kcTokens') || '{}');
 function onKeycloakTokens(tks) {
   localStorage.setItem('kcTokens', JSON.stringify(tks));
-  //store.dispatch({ type: "UPDATE_TOKEN", token: tks.token, loggedUser: keycloak.tokenParsed ? keycloak.tokenParsed['preferred_username'] : keycloak.subject });
-
+ 
   setInterval(() => {
     keycloak.updateToken(10).error(() => keycloak.logout());
   }, 10000);
@@ -35,25 +40,27 @@ function onKeycloakTokens(tks) {
 function onKeycloakEvent(event, error) {
   if (event === 'onAuthLogout') {
     localStorage.removeItem('kcTokens');
-    //store.dispatch({ type: "UPDATE_TOKEN", token: '', loggedUser: '' });
   }
 }
+*/
 
 ReactDOM.render(
   
   <div>
     <React.StrictMode>
-      <ReactKeycloakProvider
+      <Incidents />
+      
+      {/*<ReactKeycloakProvider
         authClient={keycloak}
         onEvent={onKeycloakEvent}
         onTokens={onKeycloakTokens} >
-  
-      <KeycloakTest />
-      </ReactKeycloakProvider>
+            <KeycloakTest />
+        </ReactKeycloakProvider>
+      <App />*/}
+        
+        {/* <KafkaTest />, 
+        <ServicesTest />*/}
     </React.StrictMode>,
-    //<App />,
-    //<KafkaTest />,
-    <ServicesTest />
   </div>,
   
   document.getElementById('root') as HTMLElement 

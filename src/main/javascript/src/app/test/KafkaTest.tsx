@@ -19,7 +19,7 @@ class KafkaTest extends Component {
     this.incidentUpdateSource = new EventSource("/incident/event/stream");
     this.incidentCommandSource = new EventSource("/incident/command/stream");
     this.missionSource = new EventSource("/mission/stream");
-    this.responderLocationUpdateSource = new EventSource("/responderLocationUpdate/stream");
+    this.responderLocationUpdateSource = new EventSource("/responder/location/stream");
     this.responderEventSource = new EventSource("/responder/event/stream");
     this.responderCommandSource = new EventSource("/responder/command/stream");
     this.state = {

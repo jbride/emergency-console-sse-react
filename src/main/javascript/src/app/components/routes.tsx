@@ -1,21 +1,21 @@
 import * as React from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import { Alert, PageSection } from '@patternfly/react-core';
-import { DynamicImport } from '@app/DynamicImport';
+import { DynamicImport } from '@app/components/DynamicImport';
 import { accessibleRouteChangeHandler } from '@app/utils/utils';
-import { Dashboard } from '@app/Dashboard/Dashboard';
-import { Incidents } from '@app/Incidents/Incidents';
-import { DisasterLocation } from '@app/DisasterLocation/DisasterLocation';
-import { GeneralSettings } from '@app/Settings/General/GeneralSettings';
-import { ExternalRoute } from '@app/Settings/External/ExternalRoute';
-import { ProfileSettings } from '@app/Settings/Profile/ProfileSettings';
-import { NotFound } from '@app/NotFound/NotFound';
+import { Dashboard } from '@app/components/Dashboard/Dashboard';
+import { Incidents } from '@app/components/Incidents/Incidents';
+import { DisasterLocation } from '@app/components/DisasterLocation/DisasterLocation';
+import { GeneralSettings } from '@app/components/Settings/General/GeneralSettings';
+import { ExternalRoute } from '@app/components/Settings/External/ExternalRoute';
+import { ProfileSettings } from '@app/components/Settings/Profile/ProfileSettings';
+import { NotFound } from '@app/components/NotFound/NotFound';
 import { useDocumentTitle } from '@app/utils/useDocumentTitle';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
 
 let routeFocusTimer: number;
 
-const getMissionModuleAsync = () => () => import(/* webpackChunkName: 'mission' */ '@app/Mission/Mission');
+const getMissionModuleAsync = () => () => import(/* webpackChunkName: 'mission' */ '@app/components/Mission/Mission');
 
 const MissionAsync = (routeProps: RouteComponentProps): React.ReactElement => {
   const lastNavigation = useLastLocation();

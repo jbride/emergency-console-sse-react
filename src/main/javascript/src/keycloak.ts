@@ -1,6 +1,7 @@
 import Keycloak from 'keycloak-js';
 
 console.log('configuring keycloak for auth server. AUTH_URL = '+process.env.AUTH_URL);
+
 export const keycloak = new Keycloak({
     "principal-attribute": "preferred_username",
     "realm": process.env.REALM,

@@ -37,7 +37,7 @@ public class IncidentResource {
     IncidentServiceClient incidentRestClient;
 
     @GET
-    @Path("event/stream")
+    @Path("/event/stream")
     @Produces(MediaType.SERVER_SENT_EVENTS) 
     @SseElementType("text/plain") 
     public Publisher<String> eventStream() { 
@@ -45,7 +45,7 @@ public class IncidentResource {
     }
 
     @GET
-    @Path("command/stream")
+    @Path("/command/stream")
     @Produces(MediaType.SERVER_SENT_EVENTS) 
     @SseElementType("text/plain") 
     public Publisher<String> commandStream() { 
@@ -60,7 +60,7 @@ public class IncidentResource {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/byId/{id}")
     @Produces("application/json")
     public Uni<String> getById(@PathParam String id){
         return incidentRestClient.getById(id);
