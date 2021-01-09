@@ -41,7 +41,6 @@
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
     "copy-webpack-plugin": "^6.2.1",
-    "css-loader": "^5.0.0",
     "dotenv-webpack": "^4.0.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.15.5",
@@ -92,6 +91,7 @@
     "keycloak-js": "^11.0.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
+    "react-map-gl": "^6.0.3",
     "react-router-last-location": "^2.0.1"
   }
 }

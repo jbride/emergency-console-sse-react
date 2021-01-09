@@ -16,7 +16,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import restAPIs from '@app/utils/apis'
-import { IIncidents, Incident } from '@app/models/incident';
+import { Incident } from '@app/models/incident';
 
 const pageSize = 10;
 

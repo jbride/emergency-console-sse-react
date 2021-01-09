@@ -5,6 +5,7 @@ import { ReactKeycloakProvider } from '@react-keycloak/web'
 import { KafkaTest } from '@app/test/KafkaTest';
 import { ServicesTest } from '@app/test/ServicesTest';
 import { Incidents } from '@app/components/Incidents/Incidents'
+import { Dashboard } from '@app/components/Dashboard/Dashboard'
 
 import { keycloak } from './keycloak';
 import { KeycloakTest } from '@app/test/KeycloakTest';
@@ -13,8 +14,9 @@ const REACT_VERSION = React.version;
 
 console.log("..... starting REACT version = "+REACT_VERSION+" ; NODE_ENV = "+process.env.NODE_ENV);
 
-// These come directly from shell;  no need for .env
+// These get set appropriately when "npm run bdev" is executed  with the corresponding variables set in the shell
 console.log("AUTH_URL= "+process.env.AUTH_URL);
+console.log("TOKEN= "+process.env.TOKEN);
 
 if (process.env.NODE_ENV !== "production") {
   const config = {
@@ -48,7 +50,8 @@ ReactDOM.render(
   
   <div>
     <React.StrictMode>
-      <Incidents />
+      <Dashboard />
+      {/* <Incidents /> */}
       
       {/*<ReactKeycloakProvider
         authClient={keycloak}
