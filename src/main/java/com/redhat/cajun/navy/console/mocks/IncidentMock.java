@@ -31,10 +31,10 @@ import org.jboss.logging.Logger;
 
 @Path("/mock/incident")
 @ApplicationScoped
-public class IncidentResource {
+public class IncidentMock {
 
     private static final String FILE_PATH = "com.redhat.erdemo.mock.incident.file.path";
-    private static Logger log = Logger.getLogger(IncidentResource.class);
+    private static Logger log = Logger.getLogger(IncidentMock.class);
     private Map<String, Incident> incidentMap = new HashMap<String, Incident>();
     private ObjectMapper mapper = new ObjectMapper();
 

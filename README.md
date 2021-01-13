@@ -46,6 +46,7 @@
    export KEYCLOAK=true
    export REALM=user1-emergency-realm
    export SSO_CLIENT=account-console
+   export TOKEN=$MAP_BOX_TOKEN
    `````
 
 1. At root of webapp source code (src/main/javascript), install all javascript dependencies:

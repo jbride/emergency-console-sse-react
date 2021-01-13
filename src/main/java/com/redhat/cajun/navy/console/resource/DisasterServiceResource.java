@@ -39,7 +39,7 @@ public class DisasterServiceResource {
     @GET
     @Path("/center/")
     @Produces("application/json")
-    public Uni<String> getDisasterCenter(@PathParam int id){
+    public Uni<String> getDisasterCenter(){
         return disasterServiceRestClient.getDisasterCenter();
     }
 

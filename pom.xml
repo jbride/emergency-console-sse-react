@@ -42,10 +42,12 @@
       <artifactId>quarkus-resteasy-jackson</artifactId>
     </dependency>
 
-    <!-- HTTP Reactive Routes:  https://quarkus.io/guides/reactive-routes -->
+    <!-- HTTP Reactive Routes:  https://quarkus.io/guides/reactive-routes 
+      In addition, quarkus-vertx-http  (as opposed to quarkus-vertx-web) enables hot-reload with: mvn quarkus:dev
+    -->
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx-web</artifactId>
+      <artifactId>quarkus-vertx-http</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

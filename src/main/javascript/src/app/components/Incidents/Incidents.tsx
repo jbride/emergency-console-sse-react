@@ -129,7 +129,7 @@ const incidentsStateReducer = (state, action) => {
         errorMessage: action.error
       };
     default:
-      console.log("reducer() returning state");
+      console.error("reducer() returning default state because of unknown action: "+action.type);
       return state;
   }
 }
