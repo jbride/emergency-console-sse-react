@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Incident } from '@app/models/incident';
 import { DisasterCenter } from '@app/models/disaster-center';
+import { Shelter } from '@app/models/shelter';
 
 // What is special about this "default" object in that it doesn't need to be referenced by clients ?
 export default {
@@ -9,6 +10,10 @@ export default {
           center: () => {
             const url= "/mock/disaster/center";
             return axios.get<DisasterCenter>(url);
+          },
+          shelters:() => {
+            const url= "/mock/disaster/shelters";
+            return axios.get<Shelter[]>(url);
           }
         },
         incident: {

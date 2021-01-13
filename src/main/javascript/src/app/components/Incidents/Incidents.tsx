@@ -209,19 +209,26 @@ const Incidents: React.FunctionComponent = () => {
     restAPIs.mock.incident.all()
       .then(resp => {
         const rawResult: Incident[] = resp.data;
-
-        for (const iObj of rawResult) {
-          //console.log(iObj.victimName+" , "+iObj.numberOfPeople+" , "+iObj.medicalNeeded+" , "+iObj.victimPhoneNumber+" , "+iObj.status);
-          rows.push(createIncidentRow(iObj.victimName, iObj.numberOfPeople, String(iObj.medicalNeeded), iObj.victimPhoneNumber, iObj.status));
+        if(rawResult.length > 0 && rawResult[0].victimName !== undefined) {
+          for (const iObj of rawResult) {
+            //console.log(iObj.victimName+" , "+iObj.numberOfPeople+" , "+iObj.medicalNeeded+" , "+iObj.victimPhoneNumber+" , "+iObj.status);
+            rows.push(createIncidentRow(iObj.victimName, iObj.numberOfPeople, String(iObj.medicalNeeded), iObj.victimPhoneNumber, iObj.status));
+          }
+          rows.sort((a, b) => (a.ename < b.ename ? -1 : 1));
+          console.log("getAllIncidentsFromIncidentService() # of rows = " + rows.length);
+  
+          dispatch({
+            type: "GET_INCIDENTS_SUCCESS",
+            payload: rows
+          })
+        }else{
+          const eMessage = "getIncidents() unknown response: \n\t"+resp.data;
+          console.log(eMessage);
+          dispatch({
+            type: "GET_INCIDENTS_FAILURE",
+            errorMessage: eMessage
+          })
         }
-        rows.sort((a, b) => (a.ename < b.ename ? -1 : 1));
-        console.log("getAllIncidentsFromIncidentService() # of rows = " + rows.length);
-
-        dispatch({
-          type: "GET_INCIDENTS_SUCCESS",
-          payload: rows
-        })
-
       })
       .catch(err => {
         dispatch({

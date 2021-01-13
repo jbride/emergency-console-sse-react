@@ -105,3 +105,14 @@ curl localhost:8080/health/ready
 
 curl https://user1-emergency-console.apps.ratwater.xyz/responder/stats
 
+
+# Technologies
+
+1. react-map-gl
+   `````
+   https://blog.logrocket.com/react-map-library-comparison/                                                     :   React map library comparison
+   https://sienakasa.medium.com/getting-started-with-react-mapbox-gl-js-introduction-5853a801fb64               :   Getting Started With React Mapbox Gl JS
+   https://sienakasa.medium.com/getting-started-with-react-mapbox-gl-js-markers-f5cd8aabfc4e                    :   Adding Markers
+
+   https://blog.logrocket.com/how-to-use-mapbox-gl/                                                             :   MapBox GL using React (based on React classes)
+   `````

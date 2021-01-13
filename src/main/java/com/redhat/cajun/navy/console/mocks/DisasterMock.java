@@ -34,6 +34,7 @@ public class DisasterMock {
 
     private static final String FILE_PATH = "com.redhat.erdemo.mock.disaster.location.file.path";
     private static final String CENTER = "/center";
+    private static final String SHELTERS = "/shelters";
     private static Logger log = Logger.getLogger(DisasterMock.class);
     private String defaultDisasterLocationString;
     private ObjectMapper mapper = new ObjectMapper();
@@ -70,6 +71,20 @@ public class DisasterMock {
         return Uni.createFrom().item(center);
     }
 
+    @GET
+    @Path("/shelters")
+    @Produces("application/json")
+    public Uni<String> getShelters() throws JsonMappingException, JsonProcessingException {
+        JsonNode treeNode = mapper.readTree(defaultDisasterLocationString);
+        
+        String shelters = treeNode.at(SHELTERS).toString();
+        if(shelters == null || shelters.equals("")) {
+            traverse(treeNode);
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+        return Uni.createFrom().item(shelters);
+    }
+
     public static void traverse(JsonNode root){
 
         log.info("tree = "+ root.toString());
@@ -89,7 +104,6 @@ public class DisasterMock {
             }
         } else {
             // JsonNode root represents a single value field - do something with it.
-            
         }
     }
 }
