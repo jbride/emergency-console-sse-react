@@ -15,8 +15,8 @@ import { PriorityZone } from '@app/models/priority-zone';
 import { DisasterCenter } from '@app/models/disaster-center';
 import restAPIs from '@app/utils/apis';
 
-// Pre-req:  install and configure svg-url-loader module
-import { ReactComponent as sheltericon } from "./img/incident-process.png";
+// https://github.com/patternfly/patternfly-react-seed/issues/72
+import sheltericon from '!!url-loader!@app/img/circle-shelter-hospital-colored.svg';
 
 //import ERDEMO_STYLES from '@app/erdemo-styles';
 
