@@ -13,7 +13,11 @@ import { Shelter } from '@app/models/shelter';
 import { Mission } from '@app/models/mission';
 import { PriorityZone } from '@app/models/priority-zone';
 import { DisasterCenter } from '@app/models/disaster-center';
-import restAPIs from '@app/utils/apis'
+import restAPIs from '@app/utils/apis';
+
+// Pre-req:  install and configure svg-url-loader module
+import { ReactComponent as sheltericon } from "./img/incident-process.png";
+
 //import ERDEMO_STYLES from '@app/erdemo-styles';
 
 const accessToken = process.env.TOKEN;
@@ -56,10 +60,9 @@ const getMapComponent = (thisviewport, mapControlSettings, shelters: Shelter[]) 
         latitude={shelter.lat}
         captureDrag={false}
         captureDoubleClick={false}
+        name={ shelter.name }
       >
-        <div className="shelter">
-          <span>{ shelter.name }</span>
-        </div>
+        <img src={ sheltericon } />
       </Marker>
   
       return marker;

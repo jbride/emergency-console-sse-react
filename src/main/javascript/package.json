@@ -10,6 +10,7 @@
   "scripts": {
     "prebuild": "npm run clean",
     "dr:surge": "node dr-surge.js",
+    "dev": "webpack --config webpack.dev.js && npm run dr:surge",
     "bdev": "webpack --config webpack.dev.js && npm run dr:surge && rm -rf ../resources/META-INF/resources/* && mv dist/* ../resources/META-INF/resources",
     "bprod": "webpack --config webpack.prod.js && npm run dr:surge && rm -rf ../resources/META-INF/resources/* && mv dist/* ../resources/META-INF/resources",
     "start": "node server.js",
@@ -89,8 +90,8 @@
     "axios-react-inlinesvg": "^1.0.0",
     "express": "^4.17.1",
     "keycloak-js": "^11.0.2",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-map-gl": "^6.0.3",
     "react-router-last-location": "^2.0.1"
   }
