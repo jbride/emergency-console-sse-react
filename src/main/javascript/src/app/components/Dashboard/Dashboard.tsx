@@ -14,9 +14,11 @@ import { Mission } from '@app/models/mission';
 import { PriorityZone } from '@app/models/priority-zone';
 import { DisasterCenter } from '@app/models/disaster-center';
 import restAPIs from '@app/utils/apis';
+import ControlPanel from '@app/utils/control-panel';
 
 // https://github.com/patternfly/patternfly-react-seed/issues/72
 import sheltericon from '!!url-loader!@app/img/circle-shelter-hospital-colored.svg';
+
 
 //import ERDEMO_STYLES from '@app/erdemo-styles';
 
@@ -49,37 +51,7 @@ const renderIncident = (station, i) => {
   );
 }
 
-const getMapComponent = (thisviewport, mapControlSettings, shelters: Shelter[]) => {
-  console.log("getMapComponent() viewport lat = "+thisviewport.latitude +" : # of shelters = "+shelters.length);
 
-  // build an array of <Marker ... /> components
-  let shelterMarkers = shelters.map( (shelter: Shelter, i) => {
-      const marker = <Marker
-        key={i}
-        longitude={shelter.lon}
-        latitude={shelter.lat}
-        captureDrag={false}
-        captureDoubleClick={false}
-        name={ shelter.name }
-      >
-        <img src={ sheltericon } />
-      </Marker>
-  
-      return marker;
-  });
-
-  return (
-    <ReactMapGL
-            {...thisviewport}
-            {...mapControlSettings}
-            width="100vw"
-            height="100vh"
-            mapStyle="mapbox://styles/mapbox/light-v9"
-            mapboxApiAccessToken={accessToken} >
-      { shelterMarkers }
-    </ReactMapGL>
-  );
-}
 
 // Based on the action type, the reducer returns a new state object
 const dashboardStateReducer = (state, action) => {
@@ -134,19 +106,37 @@ const dashboardStateReducer = (state, action) => {
           sheltersError: action.error,
           errorsExist: true
         };
-    default:
-      const errorMessage = "dashboardReducer: invoked with unknown action: "+action.type;
-      console.error(errorMessage);
-      throw new Error(errorMessage);
-  }
-}
-
+        default:
+          const errorMessage = "dashboardReducer: invoked with unknown action: "+action.type;
+          console.error(errorMessage);
+          throw new Error(errorMessage);
+        }
+      }
+      
 const Dashboard: React.FunctionComponent = () => {
-
+        
   // The hook typically takes 3 arguments but for this use-case, only 2 will be used
   const [state, dispatch] = useReducer(dashboardStateReducer, initialState);
   const { dCenterError, shelters, sheltersError, incidents, loading, errorsExist, viewport } = state;
-  
+        
+  const [mapControlSettings, setMapControlSettings] = React.useState({
+          dragPan: true,
+          dragRotate: true,
+          scrollZoom: true,
+          touchZoom: true,
+          touchRotate: true,
+          keyboard: true,
+          doubleClickZoom: true,
+          minZoom: 0,
+          maxZoom: 20,
+          minPitch: 0,
+          maxPitch: 85
+  });
+        
+  const [interactionState, setInteractionState] = React.useState({});
+
+
+  // Needs to be in the FunctionComponent due to use of dispatch()
   const getDisasterCenter = () => {
     dispatch({
       type: "GET_DISASTER_CENTER_REQUEST"
@@ -170,7 +160,7 @@ const Dashboard: React.FunctionComponent = () => {
           errorMessage: err
         })
       });
-    }
+  }
     
   const getShelters = () => {
     dispatch({
@@ -203,31 +193,57 @@ const Dashboard: React.FunctionComponent = () => {
   }
 
 
-  // Kick things off by fetching the Disaster Center from disaster service
-  // This only needs to execute one time
-  useEffect(() => {
-    getDisasterCenter();
-  }, []);
+  const getMapComponent = () => {
+    console.log("getMapComponent() # of shelters = "+shelters.length);
+  
+    // build an array of <Marker ... /> components
+    let shelterMarkers = shelters.map( (shelter: Shelter, i) => {
+        const marker = <Marker
+          key={i}
+          longitude={shelter.lon}
+          latitude={shelter.lat}
+          captureDrag={false}
+          captureDoubleClick={false}
+          name={ shelter.name }
+        >
+          <img src={ sheltericon } />
+        </Marker>
+    
+        return marker;
+    });
+  
+    return (
+      <ReactMapGL
+              {...viewport}
+              {...mapControlSettings}
+              width="100vw"
+              height="100vh"
+              mapStyle="mapbox://styles/mapbox/light-v9"
+              onInteractionStateChange={ setInteractionState }
+              mapboxApiAccessToken={accessToken} >
+        { shelterMarkers }
+        <ControlPanel
+          settings={ mapControlSettings }
+          interactionState={{ ...interactionState }}
+          onChange={ setMapControlSettings } />
+      </ReactMapGL>
+    );
+  }
 
-  const [mapControlSettings, setMapControlSettings] = React.useState({
-    dragPan: true,
-    dragRotate: true,
-    scrollZoom: true,
-    touchZoom: true,
-    touchRotate: true,
-    keyboard: true,
-    doubleClickZoom: true,
-    minZoom: 0,
-    maxZoom: 20,
-    minPitch: 0,
-    maxPitch: 85
-  });
 
   // Let MapGL viewport state changes be controlled by Dashboard reducer
   const onViewportChange = newviewport => {
     console.log("onViewportChange() newviewport lat = "+newviewport.lat+ " : oldviewport = "+state.viewport.lat);
     console.log("onViewportChange() newviewport = "+newviewport.length);
   }
+
+
+
+  // Kick things off by fetching the Disaster Center from disaster service
+  // This only needs to execute one time
+  useEffect(() => {
+    getDisasterCenter();
+  }, []);
 
   return (
     <div>
@@ -238,7 +254,7 @@ const Dashboard: React.FunctionComponent = () => {
         <div>Errors Exist; Check Logs</div>
       ) : (
         <div>
-          {shelters !== null && getMapComponent(viewport, mapControlSettings, shelters) } 
+          {shelters !== null && getMapComponent() } 
         </div>
       )
     }
