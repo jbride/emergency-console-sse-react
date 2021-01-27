@@ -14,9 +14,9 @@ const REACT_VERSION = React.version;
 
 console.log("..... starting REACT version = "+REACT_VERSION+" ; NODE_ENV = "+process.env.NODE_ENV);
 
-// These get set appropriately when "npm run bdev" is executed  with the corresponding variables set in the shell
+// These get set appropriately when "npm run bdev" is executed  with the corresponding environment variables set in the shell
 console.log("AUTH_URL= "+process.env.AUTH_URL);
-console.log("TOKEN= "+process.env.TOKEN);
+console.log("MAP_BOX_TOKEN= "+process.env.MAP_BOX_TOKEN);
 
 if (process.env.NODE_ENV !== "production") {
   const config = {
