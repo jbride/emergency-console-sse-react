@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { PageSection, Title } from '@patternfly/react-core';
 
 import ReactMapGL, { Marker } from 'react-map-gl';
@@ -12,9 +12,9 @@ import { Responder } from '@app/models/responder';
 import { Shelter } from '@app/models/shelter';
 import { Mission } from '@app/models/mission';
 import { PriorityZone } from '@app/models/priority-zone';
-import { DisasterCenter } from '@app/models/disaster-center';
-import restAPIs from '@app/utils/apis';
-import ControlPanel from '@app/utils/control-panel';
+
+//import ControlPanel from '@app/utils/control-panel';
+import {ShelterProvider, useShelter} from '@app/globalstate/shelter-context'
 
 // https://github.com/patternfly/patternfly-react-seed/issues/72
 import sheltericon from '!!url-loader!@app/img/circle-shelter-hospital-colored.svg';
@@ -22,17 +22,9 @@ import sheltericon from '!!url-loader!@app/img/circle-shelter-hospital-colored.s
 
 //import ERDEMO_STYLES from '@app/erdemo-styles';
 
-const accessToken = process.env.TOKEN;
-
-const initialState = {
-  dCenterError: null,
-  shelters: null,
-  sheltersError: null,
-  incidents: null,
-  loading: true,
-  errorsExist: true,
-  viewport: null
-};
+const accessToken = process.env.MAP_BOX_TOKEN;
+let getDisasterLocationFunction;
+let disasterLocationDispatch;
 
 const renderIncident = (station, i) => {
   const {name, coordinates} = station;
@@ -50,75 +42,11 @@ const renderIncident = (station, i) => {
     </Marker>
   );
 }
-
-
-
-// Based on the action type, the reducer returns a new state object
-const dashboardStateReducer = (state, action) => {
-
-  switch (action.type) {
-    case "GET_DISASTER_CENTER_REQUEST":
-      return {
-        ...state,
-        loading: true,
-        dCenterError: null,
-        errorsExist: false
-      };
-    case "GET_DISASTER_CENTER_SUCCESS":
-      return {
-        ...state,
-        disasterCenter: action.payload,
-        viewport: {
-          latitude: action.payload.lat,
-          longitude: action.payload.lon,
-          zoom: action.payload.zoom,
-          bearing: 0,
-          pitch: 0
-        },
-        dCenterError: null
-      };
-      case "GET_DISASTER_CENTER_FAILURE":
-        return {
-          ...state,
-          disasterCenter: {},
-          loading: false,
-          dCenterError: action.error,
-          errorsExist: true
-      };
-    case "GET_SHELTERS_REQUEST":
-        return {
-          ...state,
-          sheltersError: null,
-          shelters: []
-        };
-    case "GET_SHELTERS_SUCCESS":
-        return {
-          ...state,
-          loading: false,
-          shelters: action.payload,
-          sheltersError: null
-        };
-    case "GET_SHELTERS_FAILURE":
-        return {
-          ...state,
-          shelters: [],
-          loading: false,
-          sheltersError: action.error,
-          errorsExist: true
-        };
-        default:
-          const errorMessage = "dashboardReducer: invoked with unknown action: "+action.type;
-          console.error(errorMessage);
-          throw new Error(errorMessage);
-        }
-      }
       
 const Dashboard: React.FunctionComponent = () => {
-        
-  // The hook typically takes 3 arguments but for this use-case, only 2 will be used
-  const [state, dispatch] = useReducer(dashboardStateReducer, initialState);
-  const { dCenterError, shelters, sheltersError, incidents, loading, errorsExist, viewport } = state;
-        
+
+  const [interactionState, setInteractionState] = React.useState({});
+
   const [mapControlSettings, setMapControlSettings] = React.useState({
           dragPan: true,
           dragRotate: true,
@@ -132,104 +60,56 @@ const Dashboard: React.FunctionComponent = () => {
           minPitch: 0,
           maxPitch: 85
   });
-        
-  const [interactionState, setInteractionState] = React.useState({});
 
-
-  // Needs to be in the FunctionComponent due to use of dispatch()
-  const getDisasterCenter = () => {
-    dispatch({
-      type: "GET_DISASTER_CENTER_REQUEST"
-    })
-    restAPIs.mock.disaster.center()
-      .then(resp => {
-        const dCenter: DisasterCenter = resp.data;
-        console.log("getDisasterCenter() name = "+dCenter.name);
-        dispatch({
-          type: "GET_DISASTER_CENTER_SUCCESS",
-          payload: dCenter
-        })
-
-        // Now that async response with disastercenter has returned, retrieve shelters 
-        getShelters();
-        
-      })
-      .catch(err => {
-        dispatch({
-          type: "GET_DISASTER_CENTER_FAILURE",
-          errorMessage: err
-        })
-      });
-  }
+  const MapComponent = () => {
     
-  const getShelters = () => {
-    dispatch({
-      type: "GET_SHELTERS_REQUEST"
-    })
-    restAPIs.mock.disaster.shelters()
-      .then(resp => {
-        const sPayload: Shelter[] = resp.data;
-        if (sPayload.length > 0 && sPayload[0].id !== undefined) {
-          console.log("getShelters() # of shelters = " + sPayload.length);
-          dispatch({
-            type: "GET_SHELTERS_SUCCESS",
-            payload: sPayload
-          })
-        } else {
-          const eMessage = "getShelters() unknown response: \n\t" + resp.data;
-          console.log(eMessage);
-          dispatch({
-            type: "GET_SHELTERS_FAILURE",
-            errorMessage: eMessage
-          })
-        }
-      })
-      .catch(err => {
-        dispatch({
-          type: "GET_SHELTERS_FAILURE",
-          errorMessage: err
-        })
-      });
-  }
-
-
-  const getMapComponent = () => {
-    console.log("getMapComponent() # of shelters = "+shelters.length);
+    const {state, dispatch, getDisasterCenter} = useShelter();
+    if(typeof disasterLocationDispatch === 'undefined') {
+      disasterLocationDispatch = dispatch;
+      getDisasterLocationFunction = getDisasterCenter;
+      console.log("Inside MapComponent :  just set method and dispatch");
+    }
   
-    // build an array of <Marker ... /> components
-    let shelterMarkers = shelters.map( (shelter: Shelter, i) => {
-        const marker = <Marker
-          key={i}
-          longitude={shelter.lon}
-          latitude={shelter.lat}
-          captureDrag={false}
-          captureDoubleClick={false}
-          name={ shelter.name }
-        >
-          <img src={ sheltericon } />
-        </Marker>
-    
-        return marker;
+    // build an array of <Marker ... /> components for each shelter
+    let shelterMarkers = state.shelters.map( (shelter: Shelter, i) => {
+          const marker = <Marker
+            key={i}
+            longitude={shelter.lon}
+            latitude={shelter.lat}
+            captureDrag={false}
+            captureDoubleClick={false}
+            name={ shelter.name }
+          >
+            <img src={ sheltericon } />
+          </Marker>
+          return marker;
     });
   
     return (
-      <ReactMapGL
-              {...viewport}
-              {...mapControlSettings}
-              width="100vw"
-              height="100vh"
-              mapStyle="mapbox://styles/mapbox/light-v9"
-              onInteractionStateChange={ setInteractionState }
-              mapboxApiAccessToken={accessToken} >
-        { shelterMarkers }
-        <ControlPanel
-          settings={ mapControlSettings }
-          interactionState={{ ...interactionState }}
-          onChange={ setMapControlSettings } />
-      </ReactMapGL>
+      
+        state.loading && !state.errorsExist ? (
+          <span>loading... </span>
+        ) : state.errorsExist ? (
+          <div>Errors Exist; { state.dCenterError }</div>
+        ) : (
+          <ReactMapGL
+                  {...state.viewport}
+                  {...mapControlSettings}
+                  width="100vw"
+                  height="100vh"
+                  mapStyle="mapbox://styles/mapbox/light-v9"
+                  onInteractionStateChange={ setInteractionState }
+                  mapboxApiAccessToken={accessToken} >
+            { shelterMarkers }
+            { /*<ControlPanel
+              settings={ mapControlSettings }
+              interactionState={{ ...interactionState }}
+            onChange={ setMapControlSettings } /> */}
+          </ReactMapGL>
+        )
+      
     );
   }
-
 
   // Let MapGL viewport state changes be controlled by Dashboard reducer
   const onViewportChange = newviewport => {
@@ -237,28 +117,15 @@ const Dashboard: React.FunctionComponent = () => {
     console.log("onViewportChange() newviewport = "+newviewport.length);
   }
 
-
-
-  // Kick things off by fetching the Disaster Center from disaster service
-  // This only needs to execute one time
-  useEffect(() => {
-    getDisasterCenter();
+  useLayoutEffect(() => {
+      console.log("useLayoutEffect() getting disaster center and shelters");
+      getDisasterLocationFunction( disasterLocationDispatch );
   }, []);
-
+  
   return (
-    <div>
-    {
-      loading && !errorsExist ? (
-        <span>loading... </span>
-      ) : errorsExist ? (
-        <div>Errors Exist; Check Logs</div>
-      ) : (
-        <div>
-          {shelters !== null && getMapComponent() } 
-        </div>
-      )
-    }
-    </div>
+    <ShelterProvider>
+      <div><MapComponent /></div>
+    </ShelterProvider>
   )
 }
 
